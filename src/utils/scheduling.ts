@@ -595,6 +595,36 @@ export const generateNewStudyPlan = (
   existingStudyPlans: StudyPlan[] = []
 ): { plans: StudyPlan[]; suggestions: Array<{ taskTitle: string; unscheduledMinutes: number }> } => {
 
+  // Helper function to calculate actual remaining hours for a task
+  const calculateActualRemainingHours = (task: Task): number => {
+    let completedHours = 0;
+    let overdueHours = 0;
+
+    // Sum up completed, skipped, and overdue missed session hours
+    existingStudyPlans.forEach(plan => {
+      plan.plannedTasks.forEach(session => {
+        if (session.taskId === task.id) {
+          // Count completed and skipped sessions
+          if (session.done || session.status === 'completed' || session.status === 'skipped') {
+            completedHours += session.allocatedHours;
+          }
+          // Count overdue missed sessions (sessions for tasks past deadline that are missed)
+          else if (session.status === 'missed' && isTaskDeadlinePast(task.deadline)) {
+            overdueHours += session.allocatedHours;
+          }
+        }
+      });
+    });
+
+    // Remaining hours = estimated - completed - overdue missed
+    // This prevents duplication of overdue missed session hours
+    const remainingHours = Math.max(0, task.estimatedHours - completedHours - overdueHours);
+
+    console.log(`Task "${task.title}": ${task.estimatedHours}h estimated - ${completedHours}h completed - ${overdueHours}h overdue missed = ${remainingHours}h remaining`);
+
+    return remainingHours;
+  };
+
   if (settings.studyPlanMode === 'even') {
     // EVEN DISTRIBUTION LOGIC
     // Separate deadline-based tasks from no-deadline tasks
@@ -897,8 +927,15 @@ export const generateNewStudyPlan = (
         continue;
       }
       
-      let totalHours = task.estimatedHours;
-      
+      // Calculate actual remaining hours for this task (accounts for overdue missed sessions)
+      let totalHours = calculateActualRemainingHours(task);
+
+      // Skip tasks with no remaining hours (fully completed or overdue)
+      if (totalHours <= 0) {
+        console.log(`Skipping task "${task.title}" - no remaining hours`);
+        continue;
+      }
+
       // Use optimized session distribution instead of simple even distribution
       const sessionLengths = optimizeSessionDistribution(task, totalHours, daysForTask, settings);
       
@@ -1390,8 +1427,17 @@ export const generateNewStudyPlan = (
 
         if (daysForTask.length === 0) continue;
 
+        // Calculate actual remaining hours for this task (accounts for overdue missed sessions)
+        let totalHours = calculateActualRemainingHours(task);
+
+        // Skip tasks with no remaining hours
+        if (totalHours <= 0) {
+          console.log(`Skipping balanced task "${task.title}" - no remaining hours`);
+          continue;
+        }
+
         // Use optimized session distribution for even spreading
-        const sessionLengths = optimizeSessionDistribution(task, task.estimatedHours, daysForTask, settings);
+        const sessionLengths = optimizeSessionDistribution(task, totalHours, daysForTask, settings);
 
         for (let i = 0; i < sessionLengths.length && i < daysForTask.length; i++) {
           let dayIndex = i;
