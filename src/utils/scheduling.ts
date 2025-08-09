@@ -599,28 +599,35 @@ export const generateNewStudyPlan = (
   const calculateActualRemainingHours = (task: Task): number => {
     let completedHours = 0;
     let overdueHours = 0;
+    let redistributableMissedHours = 0;
 
-    // Sum up completed, skipped, and overdue missed session hours
+    // Sum up completed, skipped, and missed session hours
     existingStudyPlans.forEach(plan => {
       plan.plannedTasks.forEach(session => {
         if (session.taskId === task.id) {
-          // Count completed and skipped sessions
+          // Count completed and skipped sessions (these are truly done)
           if (session.done || session.status === 'completed' || session.status === 'skipped') {
             completedHours += session.allocatedHours;
           }
-          // Count overdue missed sessions (sessions for tasks past deadline that are missed)
-          else if (session.status === 'missed' && isTaskDeadlinePast(task.deadline)) {
-            overdueHours += session.allocatedHours;
+          // Handle missed sessions based on task deadline
+          else if (session.status === 'missed') {
+            if (isTaskDeadlinePast(task.deadline)) {
+              // Overdue missed sessions - exclude from remaining work (user must handle manually)
+              overdueHours += session.allocatedHours;
+            } else {
+              // Redistributable missed sessions - add back to remaining work (will be rescheduled)
+              redistributableMissedHours += session.allocatedHours;
+            }
           }
         }
       });
     });
 
-    // Remaining hours = estimated - completed - overdue missed
-    // This prevents duplication of overdue missed session hours
-    const remainingHours = Math.max(0, task.estimatedHours - completedHours - overdueHours);
+    // Remaining hours = estimated - completed - overdue missed + redistributable missed
+    // This ensures redistributable missed sessions get rescheduled while overdue ones don't get duplicated
+    const remainingHours = Math.max(0, task.estimatedHours - completedHours - overdueHours + redistributableMissedHours);
 
-    console.log(`Task "${task.title}": ${task.estimatedHours}h estimated - ${completedHours}h completed - ${overdueHours}h overdue missed = ${remainingHours}h remaining`);
+    console.log(`Task "${task.title}": ${task.estimatedHours}h estimated - ${completedHours}h completed - ${overdueHours}h overdue missed + ${redistributableMissedHours}h redistributable missed = ${remainingHours}h remaining`);
 
     return remainingHours;
   };
