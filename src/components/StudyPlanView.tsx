@@ -1220,6 +1220,66 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
           <p className="text-gray-500 dark:text-gray-300">Add some tasks and I'll create your perfect study schedule! 🎯</p>
         </div>
       )}
+
+      {/* Smart Assistant Modal */}
+      {showSmartAssistant && suggestions.length > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
+                  <Lightbulb className="text-yellow-500" size={24} />
+                  <span>Smart Assistant Tips</span>
+                  <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full dark:bg-yellow-900 dark:text-yellow-200">
+                    {suggestions.length} suggestions
+                  </span>
+                </h2>
+                <button
+                  onClick={() => setShowSmartAssistant(false)}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="max-h-[60vh] overflow-y-auto">
+                <div className="space-y-3">
+                  {suggestions.map((suggestion, index) => (
+                    <div key={index} className={`p-4 rounded-lg border-l-4 ${
+                      suggestion.type === 'warning' ? 'border-l-red-400 bg-red-50 dark:bg-red-900/20' :
+                      suggestion.type === 'celebration' ? 'border-l-green-400 bg-green-50 dark:bg-green-900/20' :
+                      'border-l-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                    }`}>
+                      <div className="flex items-start space-x-3">
+                        {getSuggestionIcon(suggestion.type)}
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-800 dark:text-white mb-1">{suggestion.message}</p>
+                          {suggestion.action && (
+                            <p className="text-xs text-gray-600 dark:text-gray-300">
+                              <span className="font-medium">💡 Tip:</span> {suggestion.action}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowSmartAssistant(false)}
+                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
+                  >
+                    Got it!
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
