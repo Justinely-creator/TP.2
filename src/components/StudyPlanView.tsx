@@ -893,42 +893,6 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
             </div>
           </div>
           
-          {/* Smart Assistant Content */}
-          {showSmartAssistant && suggestions.length > 0 && (
-            <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg dark:bg-yellow-900/20 dark:border-yellow-800">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200 flex items-center space-x-2">
-                  <Lightbulb className="text-yellow-600 dark:text-yellow-400" size={16} />
-                  <span>Smart Assistant Tips</span>
-                </h3>
-                <button 
-                  onClick={() => setShowSmartAssistant(false)}
-                  className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-200"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-              <div className="space-y-2">
-                {suggestions.map((suggestion, index) => (
-                  <div key={index} className={`p-3 rounded-lg border-l-3 ${
-                    suggestion.type === 'warning' ? 'border-l-red-400 bg-red-50 dark:bg-red-900/20 dark:border-l-red-600' :
-                    suggestion.type === 'celebration' ? 'border-l-green-400 bg-green-50 dark:bg-green-900/20 dark:border-l-green-600' :
-                    'border-l-blue-400 bg-blue-50 dark:bg-blue-900/20 dark:border-l-blue-600'
-                  }`}>
-                    <div className="flex items-start space-x-2">
-                      {getSuggestionIcon(suggestion.type)}
-                      <div>
-                        <p className="text-sm font-medium text-gray-800 dark:text-white">{suggestion.message}</p>
-                        {suggestion.action && (
-                          <p className="text-xs text-gray-600 mt-1 dark:text-gray-300">💡 {suggestion.action}</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
           
           {todaysPlan.plannedTasks
             .filter(session => session.status !== 'skipped') // Hide skipped sessions from UI
