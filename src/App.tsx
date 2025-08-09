@@ -27,7 +27,7 @@ import FixedCommitmentEdit from './components/FixedCommitmentEdit';
 import CommitmentsList from './components/CommitmentsList';
 import GamificationPanel from './components/GamificationPanel';
 import AchievementNotification, { MotivationalToast } from './components/AchievementNotification';
-import SuggestionsPanel from './components/SuggestionsPanel';
+import OptimizationModal from './components/OptimizationModal';
 import InteractiveTutorial from './components/InteractiveTutorial';
 import TutorialButton from './components/TutorialButton';
 import ErrorBoundary from './components/ErrorBoundary';
