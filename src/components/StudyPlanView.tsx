@@ -415,35 +415,36 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
             </div>
           </div>
           
-          <div className="mb-4 text-sm text-gray-600 dark:text-gray-300">
-            {(missedSessions.length > 0 || overdueMissedSessions.length > 0) ? (
-              <>
-                <p>You have missed study sessions. Available actions:</p>
-                <ul className="mt-2 space-y-1">
-                  <li>• <strong>Start Now</strong> - work on any missed session immediately</li>
-                  <li>• <strong>Skip</strong> - mark session as completed (forget about it)</li>
-                  <li>• <strong>Mark Task Done</strong> - complete entire task (for overdue tasks)</li>
-                  <li>• <strong>Create Fresh Plan</strong> - generate new optimal schedule (missed sessions stay here)</li>
-                </ul>
-                {(missedSessions.length > 0 || overdueMissedSessions.length > 0) && (
-                  <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
-                    <p className="text-blue-800 dark:text-blue-200 text-xs">
-                      <strong>How Regeneration Works:</strong> Creating a fresh study plan will schedule new optimal sessions for your active tasks.
-                      All missed sessions (including overdue ones) will remain here for you to handle manually.
-                    </p>
-                    <p className="text-blue-700 dark:text-blue-300 text-xs mt-2">
-                      <strong>Your choice:</strong> Start missed sessions now, skip them, mark tasks complete, or ignore them and focus on your new plan.
-                    </p>
-                  </div>
+          {showMissedSessions && (
+            <>
+              <div className="mb-4 text-sm text-gray-600 dark:text-gray-300">
+                {(missedSessions.length > 0 || overdueMissedSessions.length > 0) ? (
+                  <>
+                    <p>You have missed study sessions. Available actions:</p>
+                    <ul className="mt-2 space-y-1">
+                      <li>• <strong>Start Now</strong> - work on any missed session immediately</li>
+                      <li>• <strong>Skip</strong> - mark session as completed (forget about it)</li>
+                      <li>• <strong>Mark Task Done</strong> - complete entire task (for overdue tasks)</li>
+                      <li>• <strong>Create Fresh Plan</strong> - generate new optimal schedule (missed sessions stay here)</li>
+                    </ul>
+                    {(missedSessions.length > 0 || overdueMissedSessions.length > 0) && (
+                      <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                        <p className="text-blue-800 dark:text-blue-200 text-xs">
+                          <strong>How Regeneration Works:</strong> Creating a fresh study plan will schedule new optimal sessions for your active tasks.
+                          All missed sessions (including overdue ones) will remain here for you to handle manually.
+                        </p>
+                        <p className="text-blue-700 dark:text-blue-300 text-xs mt-2">
+                          <strong>Your choice:</strong> Start missed sessions now, skip them, mark tasks complete, or ignore them and focus on your new plan.
+                        </p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <p>No missed sessions found. All past study sessions have been completed or are up to date.</p>
                 )}
-              </>
-            ) : (
-              <p>No missed sessions found. All past study sessions have been completed or are up to date.</p>
-            )}
-          </div>
+              </div>
 
-
-          <div className="space-y-3">
+              <div className="space-y-3">
             {/* Redistributable Sessions */}
             {missedSessions.length > 0 && (
               <div className="space-y-3">
@@ -577,14 +578,16 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
               </div>
             )}
 
-            {/* No sessions found */}
-            {missedSessions.length === 0 && overdueMissedSessions.length === 0 && (
-              <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-                <CheckCircle className="text-green-500 dark:text-green-400 mx-auto mb-2" size={24} />
-                <p>All past sessions are up to date!</p>
+                {/* No sessions found */}
+                {missedSessions.length === 0 && overdueMissedSessions.length === 0 && (
+                  <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+                    <CheckCircle className="text-green-500 dark:text-green-400 mx-auto mb-2" size={24} />
+                    <p>All past sessions are up to date!</p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
       )}
       {/* Resched Modal */}
