@@ -371,12 +371,18 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
       {(missedSessions.length > 0 || overdueMissedSessions.length > 0) && (
         <div className={`bg-white rounded-xl shadow-lg p-6 mb-6 dark:bg-gray-900 dark:shadow-gray-900 border-l-4 ${(missedSessions.length > 0 || overdueMissedSessions.length > 0) ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}>
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setShowMissedSessions(!showMissedSessions)}
+              className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+            >
               <AlertTriangle className={`${(missedSessions.length > 0 || overdueMissedSessions.length > 0) ? 'text-red-500 dark:text-red-400' : 'text-gray-400 dark:text-gray-500'}`} size={24} />
               <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Missed Sessions</h2>
+              <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                {missedSessions.length + overdueMissedSessions.length} total
+              </span>
               {missedSessions.length > 0 && (
                 <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
-                  {missedSessions.length} can redistribute
+                  {missedSessions.length} redistributable
                 </span>
               )}
               {overdueMissedSessions.length > 0 && (
@@ -384,7 +390,12 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
                   {overdueMissedSessions.length} overdue
                 </span>
               )}
-            </div>
+              <div className={`transform transition-transform ${showMissedSessions ? 'rotate-90' : ''}`}>
+                <svg className="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </button>
             <div className="flex space-x-2">
               <button
                 onClick={handleRedistribution}
