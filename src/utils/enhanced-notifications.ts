@@ -16,6 +16,7 @@ export interface UnscheduledTaskNotification {
   deadline: string;
   category?: string;
   urgencyLevel: 'low' | 'medium' | 'high' | 'critical';
+  reason: string;
   suggestions: OptimizationSuggestion[];
 }
 
