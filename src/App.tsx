@@ -1970,17 +1970,16 @@ function App() {
                 {/* Main Content */}
                 <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 relative overflow-x-auto">
                     {/* Toggle Suggestions Panel Button */}
-                    {/* Suggestions Panel */}
-                    {showSuggestionsPanel && hasUnscheduled && (
-                        <SuggestionsPanel 
-                            tasks={tasks}
-                            studyPlans={studyPlans}
-                            settings={settings}
-                            fixedCommitments={fixedCommitments}
-                            // Removed suggestions prop
-                            onUpdateSettings={handleUpdateSettingsFromSuggestions}
-                        />
-                    )}
+                    {/* Optimization Modal */}
+                    <OptimizationModal
+                        tasks={tasks}
+                        studyPlans={studyPlans}
+                        settings={settings}
+                        fixedCommitments={fixedCommitments}
+                        isOpen={showSuggestionsPanel && hasUnscheduled}
+                        onClose={() => setShowSuggestionsPanel(false)}
+                        onUpdateSettings={handleUpdateSettingsFromSuggestions}
+                    />
                     {notificationMessage && (
                         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-sm sm:max-w-md lg:max-w-2xl px-4">
                             {notificationMessage.includes("can't be added due to schedule conflicts") ? (
