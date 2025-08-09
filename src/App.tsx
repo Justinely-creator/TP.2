@@ -631,11 +631,21 @@ function App() {
                     });
                 }
 
-                setStudyPlans(newPlans);
+                // IMPORTANT: Preserve missed sessions from past dates that won't be in newPlans
+                const today = new Date().toISOString().split('T')[0];
+                const pastPlansWithMissedSessions = studyPlans.filter(plan =>
+                    plan.date < today &&
+                    plan.plannedTasks.some(session => session.status === 'missed')
+                );
+
+                // Add past plans with missed sessions to the new plans
+                const finalPlans = [...pastPlansWithMissedSessions, ...newPlans];
+
+                setStudyPlans(finalPlans);
                 setLastPlanStaleReason("task");
                 setNotificationMessage(preserveManualReschedules ?
-                    'Study plan refreshed! Manual reschedules preserved.' :
-                    'Study plan refreshed! All sessions optimally rescheduled.'
+                    'Study plan refreshed! Manual reschedules preserved. Missed sessions preserved.' :
+                    'Study plan refreshed! All sessions optimally rescheduled. Missed sessions preserved.'
                 );
                 setTimeout(() => setNotificationMessage(''), 5000);
             } catch (error) {
