@@ -408,16 +408,14 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
                     </>
                   )}
                 </ul>
-                {hasOverdueSessions && (
-                  <div className="mt-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-700">
-                    <p className="text-orange-800 dark:text-orange-200 text-xs">
-                      <strong>Overdue Sessions:</strong> Sessions for tasks with passed deadlines cannot be redistributed.
-                      When you regenerate your study plan, these sessions will remain here for manual handling.
-                      You can either work on them now, skip the sessions, or mark the entire task as completed.
+                {(missedSessions.length > 0 || overdueMissedSessions.length > 0) && (
+                  <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <p className="text-blue-800 dark:text-blue-200 text-xs">
+                      <strong>How Regeneration Works:</strong> Creating a fresh study plan will schedule new optimal sessions for your active tasks.
+                      All missed sessions (including overdue ones) will remain here for you to handle manually.
                     </p>
-                    <p className="text-orange-700 dark:text-orange-300 text-xs mt-2">
-                      <strong>Good news:</strong> Regenerating won't create duplicate sessions for overdue tasks -
-                      the system now accounts for these hours properly!
+                    <p className="text-blue-700 dark:text-blue-300 text-xs mt-2">
+                      <strong>Your choice:</strong> Start missed sessions now, skip them, mark tasks complete, or ignore them and focus on your new plan.
                     </p>
                   </div>
                 )}
