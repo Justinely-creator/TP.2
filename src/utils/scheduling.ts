@@ -623,9 +623,10 @@ export const generateNewStudyPlan = (
       });
     });
 
-    // Remaining hours = estimated - completed - overdue missed + redistributable missed
-    // This ensures redistributable missed sessions get rescheduled while overdue ones don't get duplicated
-    const remainingHours = Math.max(0, task.estimatedHours - completedHours - overdueHours + redistributableMissedHours);
+    // Remaining hours = estimated - completed - overdue missed
+    // Redistributable missed hours are NOT subtracted, so they naturally remain available for rescheduling
+    // Overdue missed hours ARE subtracted to prevent duplication (user must handle manually)
+    const remainingHours = Math.max(0, task.estimatedHours - completedHours - overdueHours);
 
     console.log(`Task "${task.title}": ${task.estimatedHours}h estimated - ${completedHours}h completed - ${overdueHours}h overdue missed + ${redistributableMissedHours}h redistributable missed = ${remainingHours}h remaining`);
 
