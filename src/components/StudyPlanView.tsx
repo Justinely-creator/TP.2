@@ -377,17 +377,17 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
             <div className="flex space-x-2">
               <button
                 onClick={handleRedistribution}
-                disabled={redistributionInProgress || !canRedistribute}
+                disabled={redistributionInProgress}
                 className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                title={canRedistribute ? "Regenerate study plan to incorporate missed sessions. Overdue sessions will remain for manual handling." : "Redistribution disabled - no sessions with future deadlines to redistribute"}
+                title="Create a fresh study plan for your active tasks. Missed sessions will remain here for manual handling."
               >
                 {redistributionInProgress ? (
                   <div className="flex items-center space-x-2">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    <span>Regenerating...</span>
+                    <span>Creating Fresh Plan...</span>
                   </div>
                 ) : (
-                  'Regenerate Study Plan'
+                  'Create Fresh Study Plan'
                 )}
               </button>
             </div>
