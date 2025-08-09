@@ -20,15 +20,17 @@ interface SuggestionsPanelProps {
   onDeleteTask?: (taskId: string) => void;
 }
 
-const SuggestionsPanel: React.FC<SuggestionsPanelProps> = ({ 
-  tasks, 
-  studyPlans, 
-  settings, 
-  fixedCommitments, 
-  suggestions = [], 
+const SuggestionsPanel: React.FC<SuggestionsPanelProps> = ({
+  tasks,
+  studyPlans,
+  settings,
+  fixedCommitments,
+  suggestions = [],
   onUpdateSettings,
   onUpdateTask,
-  onDeleteTask 
+  onDeleteTask,
+  isOpen,
+  onClose
 }) => {
   // Use enhanced notification system for accurate unscheduled detection
   const unscheduledTasks = getAccurateUnscheduledTasks(tasks, studyPlans, settings);
