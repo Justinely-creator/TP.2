@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lightbulb, AlertTriangle, Clock, Calendar, Settings, Target, Star, Zap, TrendingUp, Users, Calendar as CalendarIcon } from 'lucide-react';
+import { Lightbulb, AlertTriangle, Clock, Calendar, Settings, Target, Star, Zap, TrendingUp, Users, Calendar as CalendarIcon, X } from 'lucide-react';
 import { getAccurateUnscheduledTasks, createNotificationSummary, UnscheduledTaskNotification } from '../utils/enhanced-notifications';
 import { Task, StudyPlan, UserSettings, FixedCommitment } from '../types';
 
@@ -9,6 +9,8 @@ interface SuggestionsPanelProps {
   settings: UserSettings;
   fixedCommitments: FixedCommitment[];
   suggestions?: any[];
+  isOpen: boolean;
+  onClose: () => void;
   onUpdateSettings?: (updates: Partial<{
     dailyAvailableHours: number;
     workDays: number[];
