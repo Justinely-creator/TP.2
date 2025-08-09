@@ -131,6 +131,253 @@ export const createTestDataWithMissedSessions = () => {
 };
 
 /**
+ * Creates more realistic test data with various scenarios
+ */
+export const createRealisticTestData = () => {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const nextWeek = new Date(today);
+  nextWeek.setDate(nextWeek.getDate() + 7);
+  const lastWeek = new Date(today);
+  lastWeek.setDate(lastWeek.getDate() - 7);
+  
+  const getLocalDateString = (date: Date) => {
+    return date.toISOString().split('T')[0];
+  };
+
+  const testTasks: Task[] = [
+    // Task 1: Math with mixed completion status
+    {
+      id: 'realistic-math',
+      title: 'Advanced Calculus Study',
+      description: 'Prepare for upcoming calculus exam',
+      deadline: nextWeek.toISOString(),
+      importance: true,
+      estimatedHours: 6, // Total 6 hours
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      category: 'Mathematics'
+    },
+    // Task 2: Nearly completed task 
+    {
+      id: 'realistic-physics',
+      title: 'Physics Lab Report',
+      description: 'Complete lab report on motion physics',
+      deadline: tomorrow.toISOString(),
+      importance: true,
+      estimatedHours: 4, // Total 4 hours
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      category: 'Physics'
+    },
+    // Task 3: Overdue task
+    {
+      id: 'realistic-english',
+      title: 'English Essay',
+      description: 'Write essay on Shakespeare',
+      deadline: yesterday.toISOString(), // Overdue
+      importance: false,
+      estimatedHours: 3,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      category: 'Literature'
+    },
+    // Task 4: Future task
+    {
+      id: 'realistic-history',
+      title: 'History Research Project',
+      description: 'Research project on World War II',
+      deadline: new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString(), // 2 weeks
+      importance: true,
+      estimatedHours: 8,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      category: 'History'
+    },
+    // Task 5: Completed task (should not appear in sessions)
+    {
+      id: 'realistic-chemistry',
+      title: 'Chemistry Lab',
+      description: 'Complete chemistry experiment',
+      deadline: tomorrow.toISOString(),
+      importance: false,
+      estimatedHours: 2,
+      status: 'completed', // This task is completed
+      createdAt: new Date().toISOString(),
+      category: 'Chemistry'
+    }
+  ];
+
+  const testStudyPlans: StudyPlan[] = [
+    // Last week - some completed sessions
+    {
+      id: `plan-${getLocalDateString(lastWeek)}`,
+      date: getLocalDateString(lastWeek),
+      plannedTasks: [
+        {
+          taskId: 'realistic-math',
+          scheduledTime: `${getLocalDateString(lastWeek)} 09:00`,
+          startTime: '09:00',
+          endTime: '11:00',
+          allocatedHours: 2,
+          sessionNumber: 1,
+          isFlexible: true,
+          done: true,
+          status: 'completed'
+        },
+        {
+          taskId: 'realistic-physics',
+          scheduledTime: `${getLocalDateString(lastWeek)} 14:00`,
+          startTime: '14:00',
+          endTime: '16:00',
+          allocatedHours: 2,
+          sessionNumber: 1,
+          isFlexible: true,
+          done: true,
+          status: 'completed'
+        }
+      ],
+      totalStudyHours: 4,
+      availableHours: 8
+    },
+    // Yesterday - mixed results
+    {
+      id: `plan-${getLocalDateString(yesterday)}`,
+      date: getLocalDateString(yesterday),
+      plannedTasks: [
+        {
+          taskId: 'realistic-math',
+          scheduledTime: `${getLocalDateString(yesterday)} 10:00`,
+          startTime: '10:00',
+          endTime: '12:00',
+          allocatedHours: 2,
+          sessionNumber: 2,
+          isFlexible: true,
+          done: true,
+          status: 'completed'
+        },
+        {
+          taskId: 'realistic-physics',
+          scheduledTime: `${getLocalDateString(yesterday)} 15:00`,
+          startTime: '15:00',
+          endTime: '16:30',
+          allocatedHours: 1.5,
+          sessionNumber: 2,
+          isFlexible: true,
+          status: 'missed' // Missed session
+        },
+        {
+          taskId: 'realistic-english',
+          scheduledTime: `${getLocalDateString(yesterday)} 18:00`,
+          startTime: '18:00',
+          endTime: '19:30',
+          allocatedHours: 1.5,
+          sessionNumber: 1,
+          isFlexible: true,
+          status: 'missed' // Missed session for overdue task
+        }
+      ],
+      totalStudyHours: 5,
+      availableHours: 8
+    },
+    // Today - current sessions (only for active tasks)
+    {
+      id: `plan-${getLocalDateString(today)}`,
+      date: getLocalDateString(today),
+      plannedTasks: [
+        {
+          taskId: 'realistic-math',
+          scheduledTime: `${getLocalDateString(today)} 09:00`,
+          startTime: '09:00',
+          endTime: '11:00',
+          allocatedHours: 2,
+          sessionNumber: 3,
+          isFlexible: true,
+          status: 'scheduled'
+        },
+        {
+          taskId: 'realistic-physics',
+          scheduledTime: `${getLocalDateString(today)} 14:00`,
+          startTime: '14:00',
+          endTime: '14:30',
+          allocatedHours: 0.5,
+          sessionNumber: 3,
+          isFlexible: true,
+          status: 'scheduled'
+        },
+        {
+          taskId: 'realistic-history',
+          scheduledTime: `${getLocalDateString(today)} 16:00`,
+          startTime: '16:00',
+          endTime: '18:00',
+          allocatedHours: 2,
+          sessionNumber: 1,
+          isFlexible: true,
+          status: 'scheduled'
+        }
+        // Note: No session for 'realistic-chemistry' since it's completed
+        // Note: No session for 'realistic-english' since it's overdue
+      ],
+      totalStudyHours: 4.5,
+      availableHours: 8
+    },
+    // Tomorrow - future sessions
+    {
+      id: `plan-${getLocalDateString(tomorrow)}`,
+      date: getLocalDateString(tomorrow),
+      plannedTasks: [
+        {
+          taskId: 'realistic-history',
+          scheduledTime: `${getLocalDateString(tomorrow)} 10:00`,
+          startTime: '10:00',
+          endTime: '13:00',
+          allocatedHours: 3,
+          sessionNumber: 2,
+          isFlexible: true,
+          status: 'scheduled'
+        }
+      ],
+      totalStudyHours: 3,
+      availableHours: 8
+    }
+  ];
+
+  return { testTasks, testStudyPlans };
+};
+
+/**
+ * Sets up realistic test data in localStorage
+ */
+export const setupRealisticTestData = () => {
+  const { testTasks, testStudyPlans } = createRealisticTestData();
+  
+  localStorage.setItem('timepilot-tasks', JSON.stringify(testTasks));
+  localStorage.setItem('timepilot-studyPlans', JSON.stringify(testStudyPlans));
+  
+  console.log('Realistic test data setup complete!');
+  console.log('Tasks created:', testTasks.length);
+  console.log('- Active tasks:', testTasks.filter(t => t.status === 'pending').length);
+  console.log('- Completed tasks:', testTasks.filter(t => t.status === 'completed').length);
+  console.log('Study plans created:', testStudyPlans.length);
+  console.log('Missed sessions created:', 
+    testStudyPlans.reduce((count, plan) => 
+      count + plan.plannedTasks.filter(session => session.status === 'missed').length, 0
+    )
+  );
+  console.log('Completed sessions:', 
+    testStudyPlans.reduce((count, plan) => 
+      count + plan.plannedTasks.filter(session => session.done || session.status === 'completed').length, 0
+    )
+  );
+  
+  // Reload the page to reflect changes
+  window.location.reload();
+};
+
+/**
  * Sets up test data in localStorage for testing
  */
 export const setupTestData = () => {
@@ -280,3 +527,4 @@ export const setupBalancedPriorityTest = () => {
 // Expose functions globally for easy access in browser console
 (window as any).setupTestData = setupTestData;
 (window as any).setupBalancedPriorityTest = setupBalancedPriorityTest;
+(window as any).setupRealisticTestData = setupRealisticTestData;
