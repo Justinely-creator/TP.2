@@ -462,18 +462,18 @@ function App() {
                     const result = generateNewStudyPlan(tasks, settings, fixedCommitments, studyPlans);
                     const newPlans = result.plans;
                     
-                    // Enhanced preservation logic
+                    // SIMPLIFIED: Only preserve completed, skipped, and manual reschedules
                     newPlans.forEach(plan => {
                         const prevPlan = studyPlans.find(p => p.date === plan.date);
                         if (!prevPlan) return;
-                        
+
                         plan.plannedTasks.forEach(session => {
-                            const prevSession = prevPlan.plannedTasks.find(s => 
+                            const prevSession = prevPlan.plannedTasks.find(s =>
                                 s.taskId === session.taskId && s.sessionNumber === session.sessionNumber
                             );
                             if (prevSession) {
-                                // Preserve done sessions
-                                if (prevSession.done) {
+                                // Preserve completed sessions
+                                if (prevSession.done || prevSession.status === 'completed') {
                                     session.done = true;
                                     session.status = prevSession.status;
                                     session.actualHours = prevSession.actualHours;
@@ -483,16 +483,15 @@ function App() {
                                 else if (prevSession.status === 'skipped') {
                                     session.status = 'skipped';
                                 }
-                                // Preserve manual reschedules with their new times
+                                // Preserve manual reschedules only (not automatic reschedules)
                                 else if (prevSession.originalTime && prevSession.originalDate && prevSession.isManualOverride) {
                                     session.originalTime = prevSession.originalTime;
                                     session.originalDate = prevSession.originalDate;
                                     session.rescheduledAt = prevSession.rescheduledAt;
                                     session.isManualOverride = prevSession.isManualOverride;
-                                    // Keep the rescheduled times
                                     session.startTime = prevSession.startTime;
                                     session.endTime = prevSession.endTime;
-                                    // Move session to the rescheduled date if different
+                                    // Move to rescheduled date if different
                                     if (prevSession.originalDate !== plan.date) {
                                         const targetPlan = newPlans.find(p => p.date === prevSession.originalDate);
                                         if (targetPlan) {
@@ -501,6 +500,7 @@ function App() {
                                         }
                                     }
                                 }
+                                // Missed sessions and automatic reschedules are NOT preserved - fresh start
                             }
                         });
                     });
