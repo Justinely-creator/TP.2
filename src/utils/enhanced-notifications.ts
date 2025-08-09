@@ -74,7 +74,8 @@ export function getAccurateUnscheduledTasks(
       const unscheduledMinutes = Math.round(unscheduledHours * 60);
       const urgencyLevel = calculateUrgencyLevel(task, unscheduledHours);
       const suggestions = generateOptimizationSuggestions(task, unscheduledHours, settings);
-      
+      const reason = generateReasonMessage(task, unscheduledHours, scheduledHours);
+
       unscheduledTasks.push({
         taskTitle: task.title,
         taskId: task.id,
@@ -85,6 +86,7 @@ export function getAccurateUnscheduledTasks(
         deadline: task.deadline,
         category: task.category,
         urgencyLevel,
+        reason,
         suggestions
       });
     }
