@@ -628,7 +628,7 @@ export const generateNewStudyPlan = (
     // Overdue missed hours ARE subtracted to prevent duplication (user must handle manually)
     const remainingHours = Math.max(0, task.estimatedHours - completedHours - overdueHours);
 
-    console.log(`Task "${task.title}": ${task.estimatedHours}h estimated - ${completedHours}h completed - ${overdueHours}h overdue missed + ${redistributableMissedHours}h redistributable missed = ${remainingHours}h remaining`);
+    console.log(`Task "${task.title}": ${task.estimatedHours}h estimated - ${completedHours}h completed - ${overdueHours}h overdue missed (${redistributableMissedHours}h redistributable missed stay available) = ${remainingHours}h remaining`);
 
     return remainingHours;
   };
