@@ -856,12 +856,14 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
               <Calendar className="text-blue-600 dark:text-blue-400" size={24} />
               <span>Today's Sessions</span>
               {suggestions.length > 0 && (
-                <button 
-                  onClick={() => setShowSmartAssistant(!showSmartAssistant)}
-                  className="ml-2 p-1.5 bg-yellow-100 hover:bg-yellow-200 rounded-full transition-colors duration-200 dark:bg-yellow-900 dark:hover:bg-yellow-800"
-                  title="Smart Assistant Tips"
+                <button
+                  onClick={() => setShowSmartAssistant(true)}
+                  className="ml-2 px-3 py-1.5 bg-yellow-100 hover:bg-yellow-200 rounded-lg transition-colors duration-200 dark:bg-yellow-900 dark:hover:bg-yellow-800 text-sm flex items-center space-x-1"
+                  title="View optimization suggestions"
                 >
                   <Lightbulb className="text-yellow-600 dark:text-yellow-400" size={16} />
+                  <span className="text-yellow-800 dark:text-yellow-200 font-medium">{suggestions.length}</span>
+                  <span className="text-yellow-700 dark:text-yellow-300">tips</span>
                 </button>
               )}
             </h2>
