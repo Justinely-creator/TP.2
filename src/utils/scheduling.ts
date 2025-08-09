@@ -1395,14 +1395,8 @@ export const generateNewStudyPlan = (
 
         if (daysForTask.length === 0) continue;
 
-        // Calculate actual remaining hours for this task (accounts for overdue missed sessions)
-        let totalHours = calculateActualRemainingHours(task);
-
-        // Skip tasks with no remaining hours
-        if (totalHours <= 0) {
-          console.log(`Skipping balanced task "${task.title}" - no remaining hours`);
-          continue;
-        }
+        // SIMPLIFIED: Use full task estimate - regeneration creates fresh plan
+        let totalHours = task.estimatedHours;
 
         // Use optimized session distribution for even spreading
         const sessionLengths = optimizeSessionDistribution(task, totalHours, daysForTask, settings);
