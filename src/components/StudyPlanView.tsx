@@ -396,6 +396,11 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
                 </svg>
               </div>
             </button>
+            {!showMissedSessions && (
+              <div className="text-sm text-gray-600 dark:text-gray-400 italic">
+                Click to {missedSessions.length + overdueMissedSessions.length > 0 ? 'manage missed sessions' : 'view details'}
+              </div>
+            )}
             <div className="flex space-x-2">
               <button
                 onClick={handleRedistribution}
