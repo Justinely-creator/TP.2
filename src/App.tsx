@@ -591,7 +591,7 @@ function App() {
                                 else if (prevSession.status === 'skipped') {
                                     session.status = 'skipped';
                                 }
-                                // Preserve manual reschedules
+                                // Preserve manual reschedules only
                                 else if (prevSession.originalTime && prevSession.originalDate && prevSession.isManualOverride) {
                                     session.originalTime = prevSession.originalTime;
                                     session.originalDate = prevSession.originalDate;
@@ -600,13 +600,7 @@ function App() {
                                     session.rescheduledAt = prevSession.rescheduledAt;
                                     session.isManualOverride = prevSession.isManualOverride;
                                 }
-                                // Preserve other rescheduled sessions (but allow regeneration of times)
-                                else if (prevSession.originalTime && prevSession.originalDate) {
-                                    session.originalTime = prevSession.originalTime;
-                                    session.originalDate = prevSession.originalDate;
-                                    session.rescheduledAt = prevSession.rescheduledAt;
-                                    session.isManualOverride = prevSession.isManualOverride;
-                                }
+                                // All other sessions (missed, automatic reschedules) get fresh start
                             }
                         });
                     });
