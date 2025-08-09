@@ -114,7 +114,7 @@ const OptimizationModal: React.FC<OptimizationModalProps> = ({
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="font-semibold text-gray-900 dark:text-white truncate">
-                            {taskNotification.title}
+                            {taskNotification.taskTitle}
                           </h4>
                           <span className={`px-2 py-1 text-xs rounded-full font-medium ${
                             taskNotification.urgencyLevel === 'critical' ? 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200' :
