@@ -422,8 +422,13 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
                 {hasOverdueSessions && (
                   <div className="mt-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-700">
                     <p className="text-orange-800 dark:text-orange-200 text-xs">
-                      <strong>Note:</strong> Sessions for tasks with passed deadlines cannot be redistributed.
+                      <strong>Overdue Sessions:</strong> Sessions for tasks with passed deadlines cannot be redistributed.
+                      When you regenerate your study plan, these sessions will remain here for manual handling.
                       You can either work on them now, skip the sessions, or mark the entire task as completed.
+                    </p>
+                    <p className="text-orange-700 dark:text-orange-300 text-xs mt-2">
+                      <strong>Good news:</strong> Regenerating won't create duplicate sessions for overdue tasks -
+                      the system now accounts for these hours properly!
                     </p>
                   </div>
                 )}
