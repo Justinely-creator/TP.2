@@ -8,7 +8,7 @@ TimePilot is a sophisticated study planning application that uses intelligent al
 
 ### 🎯 Smart Task Management
 - **Intelligent Task Estimation**: Built-in estimation helper for different task types
-- **Priority-Based Scheduling**: Automatically prioritizes important and urgent tasks
+- **Priority-Based Scheduling**: Autocally prioritizes important and urgent tasks
 - **Deadline Awareness**: Smart scheduling that respects your deadlines
 - **Task Categories**: Organize tasks by subject, type, and impact level
 
