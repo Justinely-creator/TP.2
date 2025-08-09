@@ -385,13 +385,14 @@ export const setupRealisticTestData = () => {
     )
   );
 
-  console.log('\n🎯 Test the missed session regeneration behavior:');
+  console.log('\n🎯 Test the SIMPLIFIED missed session handling:');
   console.log('1. Go to Study Plan view');
-  console.log('2. Click "Regenerate Study Plan"');
-  console.log('3. ✅ Redistributable missed sessions → Hours get rescheduled in new plan');
-  console.log('4. ✅ Overdue missed sessions → Remain as missed for manual handling');
-  console.log('5. ✅ No work lost → Everything either rescheduled or preserved');
-  console.log('6. ❌ No duplicate sessions created');
+  console.log('2. Click "Create Fresh Study Plan"');
+  console.log('3. ✅ Fresh plan created using full task estimates');
+  console.log('4. ✅ ALL missed sessions stay in Missed Sessions section');
+  console.log('5. ✅ No complex redistribution - simple fresh start');
+  console.log('6. ✅ User manually handles missed sessions (Start/Skip/Mark Done)');
+  console.log('7. ✅ No edge cases or duplication bugs!');
 
   // Reload the page to reflect changes
   window.location.reload();
