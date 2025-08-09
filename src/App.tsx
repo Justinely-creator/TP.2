@@ -514,17 +514,17 @@ function App() {
             const result = generateNewStudyPlan(tasks, settings, fixedCommitments, studyPlans);
             const newPlans = result.plans;
             
-            // Preserve session status from previous plan
+            // SIMPLIFIED: Only preserve completed and skipped sessions
+            // All other sessions (missed, rescheduled) are regenerated fresh
             newPlans.forEach(plan => {
                 const prevPlan = studyPlans.find(p => p.date === plan.date);
                 if (!prevPlan) return;
-                
-                // Preserve session status and properties
+
                 plan.plannedTasks.forEach(session => {
                     const prevSession = prevPlan.plannedTasks.find(s => s.taskId === session.taskId && s.sessionNumber === session.sessionNumber);
                     if (prevSession) {
-                        // Preserve done sessions
-                        if (prevSession.done) {
+                        // Preserve completed sessions
+                        if (prevSession.done || prevSession.status === 'completed') {
                             session.done = true;
                             session.status = prevSession.status;
                             session.actualHours = prevSession.actualHours;
@@ -534,13 +534,7 @@ function App() {
                         else if (prevSession.status === 'skipped') {
                             session.status = 'skipped';
                         }
-                        // Preserve rescheduled sessions (but allow regeneration of times)
-                        else if (prevSession.originalTime && prevSession.originalDate) {
-                            session.originalTime = prevSession.originalTime;
-                            session.originalDate = prevSession.originalDate;
-                            session.rescheduledAt = prevSession.rescheduledAt;
-                            session.isManualOverride = prevSession.isManualOverride;
-                        }
+                        // All other sessions (missed, rescheduled) are regenerated fresh
                     }
                 });
             });
