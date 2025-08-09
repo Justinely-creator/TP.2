@@ -353,26 +353,45 @@ export const createRealisticTestData = () => {
  */
 export const setupRealisticTestData = () => {
   const { testTasks, testStudyPlans } = createRealisticTestData();
-  
+
   localStorage.setItem('timepilot-tasks', JSON.stringify(testTasks));
   localStorage.setItem('timepilot-studyPlans', JSON.stringify(testStudyPlans));
-  
+
   console.log('Realistic test data setup complete!');
   console.log('Tasks created:', testTasks.length);
   console.log('- Active tasks:', testTasks.filter(t => t.status === 'pending').length);
   console.log('- Completed tasks:', testTasks.filter(t => t.status === 'completed').length);
   console.log('Study plans created:', testStudyPlans.length);
-  console.log('Missed sessions created:', 
-    testStudyPlans.reduce((count, plan) => 
-      count + plan.plannedTasks.filter(session => session.status === 'missed').length, 0
-    )
+
+  const missedSessions = testStudyPlans.reduce((count, plan) =>
+    count + plan.plannedTasks.filter(session => session.status === 'missed').length, 0
   );
-  console.log('Completed sessions:', 
-    testStudyPlans.reduce((count, plan) => 
+  const overdueMissedSessions = testStudyPlans.reduce((count, plan) =>
+    count + plan.plannedTasks.filter(session => {
+      if (session.status === 'missed') {
+        const task = testTasks.find(t => t.id === session.taskId);
+        return task && new Date(task.deadline) < new Date();
+      }
+      return false;
+    }).length, 0
+  );
+
+  console.log('Missed sessions created:', missedSessions);
+  console.log('- Redistributable missed sessions:', missedSessions - overdueMissedSessions);
+  console.log('- Overdue missed sessions:', overdueMissedSessions);
+  console.log('Completed sessions:',
+    testStudyPlans.reduce((count, plan) =>
       count + plan.plannedTasks.filter(session => session.done || session.status === 'completed').length, 0
     )
   );
-  
+
+  console.log('\n🎯 Test the overdue missed session fix:');
+  console.log('1. Go to Study Plan view');
+  console.log('2. Click "Regenerate Study Plan"');
+  console.log('3. Verify: No duplicate sessions are created for overdue tasks');
+  console.log('4. Verify: Redistributable missed sessions are incorporated into new plan');
+  console.log('5. Verify: Overdue missed sessions remain for manual handling');
+
   // Reload the page to reflect changes
   window.location.reload();
 };
