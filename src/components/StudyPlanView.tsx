@@ -264,19 +264,8 @@ const StudyPlanView: React.FC<StudyPlanViewProps> = ({ studyPlans, tasks, fixedC
       // Trigger study plan regeneration instead of redistribution
       onGenerateStudyPlan();
 
-      // Provide detailed feedback about what happened
-      const redistributableCount = missedSessions.length;
-      const overdueCount = overdueMissedSessions.length;
-
-      let message = 'Study plan regenerated successfully!';
-      if (redistributableCount > 0) {
-        message += ` ${redistributableCount} missed session${redistributableCount > 1 ? 's' : ''} incorporated into new plan.`;
-      }
-      if (overdueCount > 0) {
-        message += ` ${overdueCount} overdue session${overdueCount > 1 ? 's' : ''} preserved for manual handling.`;
-      }
-
-      setNotificationMessage(message);
+      // Simple feedback for fresh start approach
+      setNotificationMessage('Fresh study plan created! All missed sessions remain here for manual handling.');
     } catch (error) {
       console.error('Study plan regeneration failed:', error);
       setNotificationMessage('Failed to regenerate study plan. Please try again.');
